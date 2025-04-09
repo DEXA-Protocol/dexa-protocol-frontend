@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/layout/Navbar";
@@ -15,11 +14,181 @@ import {
   Star,
   Bell,
   Bookmark,
-  Settings
+  Settings,
+  Plus,
+  History
 } from "lucide-react";
+import { useAccount } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import ProjectItem from '@/components/dashboard/ProjectItem';
+import FundingSubmissionItem from '@/components/dashboard/FundingSubmissionItem';
+import TransactionHistoryItem from '@/components/dashboard/TransactionHistoryItem';
+import OpenDataItem from '@/components/dashboard/OpenDataItem';
+
+// Mock data for demonstration
+const mockProjects = [
+  {
+    id: '1',
+    title: 'Decentralized Clinical Trials Platform',
+    description: 'A blockchain-based platform for managing clinical trials data',
+    status: 'published' as const,
+    createdAt: '2024-03-15',
+  },
+  {
+    id: '2',
+    title: 'AI-Powered Drug Discovery',
+    description: 'Using machine learning to accelerate drug discovery process',
+    status: 'draft' as const,
+    createdAt: '2024-03-20',
+  },
+];
+
+const mockFundingSubmissions = [
+  {
+    id: '1',
+    projectTitle: 'Decentralized Clinical Trials Platform',
+    amount: '50,000 USDC',
+    status: 'pending' as const,
+    submittedAt: '2024-03-15',
+  },
+  {
+    id: '2',
+    projectTitle: 'AI-Powered Drug Discovery',
+    amount: '75,000 USDC',
+    status: 'approved' as const,
+    submittedAt: '2024-03-10',
+  },
+];
+
+const mockTransactions = [
+  {
+    id: '1',
+    type: 'vote' as const,
+    title: 'Vote on Protocol Upgrade',
+    description: 'Voted YES on proposal #123 to upgrade the protocol to v2.0',
+    timestamp: '2024-03-15T14:30:00Z',
+    status: 'completed' as const,
+    transactionHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+  },
+  {
+    id: '2',
+    type: 'proposal' as const,
+    title: 'New Research Grant Program',
+    description: 'Submitted proposal #124 for a new research grant program',
+    timestamp: '2024-03-10T09:15:00Z',
+    status: 'pending' as const,
+    transactionHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
+  },
+  {
+    id: '3',
+    type: 'contribution' as const,
+    title: 'DAO Treasury Contribution',
+    description: 'Contributed 1000 USDC to the DAO treasury',
+    timestamp: '2024-03-05T16:45:00Z',
+    status: 'completed' as const,
+    amount: '1000 USDC',
+    transactionHash: '0x7890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123456',
+  },
+];
+
+const mockOpenDataItems = [
+  {
+    id: '1',
+    title: 'Clinical Trial Dataset - Phase 1',
+    description: 'Comprehensive dataset from Phase 1 clinical trials for cancer treatment',
+    category: 'Healthcare',
+    status: 'available' as const,
+    price: '500 USDC',
+    createdAt: '2024-03-15',
+    salesCount: 3,
+  },
+  {
+    id: '2',
+    title: 'Genomic Sequencing Data',
+    description: 'High-quality genomic sequencing data from 1000 patients',
+    category: 'Genomics',
+    status: 'sold' as const,
+    price: '1200 USDC',
+    createdAt: '2024-03-01',
+    salesCount: 1,
+  },
+  {
+    id: '3',
+    title: 'Drug Interaction Database',
+    description: 'Database of known drug interactions and side effects',
+    category: 'Pharmacology',
+    status: 'pending' as const,
+    price: '800 USDC',
+    createdAt: '2024-03-20',
+    salesCount: 0,
+  },
+];
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+  const { isConnected } = useAccount();
+  const [activeTab, setActiveTab] = useState("projects");
+
+  if (!isConnected) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <h1 className="text-2xl font-bold">Please connect your wallet to view your dashboard</h1>
+        <ConnectButton />
+      </div>
+    );
+  }
+
+  const handleProjectEdit = (id: string) => {
+    console.log('Edit project:', id);
+    // Implement edit functionality
+  };
+
+  const handleProjectDelete = (id: string) => {
+    console.log('Delete project:', id);
+    // Implement delete functionality
+  };
+
+  const handleFundingEdit = (id: string) => {
+    console.log('Edit funding submission:', id);
+    // Implement edit functionality
+  };
+
+  const handleFundingDelete = (id: string) => {
+    console.log('Delete funding submission:', id);
+    // Implement delete functionality
+  };
+
+  const handleFundingViewDetails = (id: string) => {
+    console.log('View funding details:', id);
+    // Implement view details functionality
+  };
+
+  const handleOpenDataEdit = (id: string) => {
+    console.log('Edit open data item:', id);
+    // Implement edit functionality
+  };
+
+  const handleOpenDataDelete = (id: string) => {
+    console.log('Delete open data item:', id);
+    // Implement delete functionality
+  };
+
+  const handleOpenDataViewDetails = (id: string) => {
+    console.log('View open data details:', id);
+    // Implement view details functionality
+  };
+
+  const getNewButtonText = () => {
+    switch (activeTab) {
+      case 'projects':
+        return 'New Project';
+      case 'funding':
+        return 'New Funding Request';
+      case 'open-data':
+        return 'New Data Item';
+      default:
+        return 'New Item';
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -77,216 +246,126 @@ const Dashboard = () => {
             </Card>
           </div>
           
-          <Tabs
-            defaultValue="overview"
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid grid-cols-3 md:grid-cols-5 lg:w-[600px]">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="papers">Papers</TabsTrigger>
-              <TabsTrigger value="collaborations">Collaborations</TabsTrigger>
-              <TabsTrigger value="datasets">Datasets</TabsTrigger>
-              <TabsTrigger value="proposals">Proposals</TabsTrigger>
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            {activeTab !== 'transactions' && (
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                {getNewButtonText()}
+              </Button>
+            )}
+          </div>
+          
+          <Tabs defaultValue="projects" className="w-full" onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="projects">My Projects</TabsTrigger>
+              <TabsTrigger value="funding">Funding Submissions</TabsTrigger>
+              <TabsTrigger value="transactions">
+                <History className="h-4 w-4 mr-1" />
+                Transactions
+              </TabsTrigger>
+              <TabsTrigger value="open-data">
+                <Database className="h-4 w-4 mr-1" />
+                Open Data
+              </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="overview" className="animate-fade-in space-y-6">
+            <TabsContent value="projects">
               <Card>
                 <CardHeader>
-                  <CardTitle>Research Activity</CardTitle>
-                </CardHeader>
-                <CardContent className="h-80 flex items-center justify-center">
-                  <div className="w-full h-full flex items-center justify-center">
-                    <BarChart className="h-16 w-16 text-muted" />
-                    <p className="text-muted-foreground">Activity chart will be displayed here</p>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Activity</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-2 rounded-full">
-                        <FileText className="h-4 w-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Published new paper</p>
-                        <p className="text-sm text-muted-foreground">Quantum Computing Applications in Genomics</p>
-                        <p className="text-xs text-muted-foreground mt-1">2 days ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-2 rounded-full">
-                        <Users className="h-4 w-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">New collaboration request</p>
-                        <p className="text-sm text-muted-foreground">From Dr. Sarah Johnson - Stanford University</p>
-                        <p className="text-xs text-muted-foreground mt-1">5 days ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-2 rounded-full">
-                        <Database className="h-4 w-4 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Dataset accessed</p>
-                        <p className="text-sm text-muted-foreground">Clinical Trial Results - Project Alpha</p>
-                        <p className="text-xs text-muted-foreground mt-1">1 week ago</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Research Progress</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <p className="text-sm font-medium">Gene Therapy Project</p>
-                        <p className="text-sm text-muted-foreground">75%</p>
-                      </div>
-                      <Progress value={75} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <p className="text-sm font-medium">AI Model Training</p>
-                        <p className="text-sm text-muted-foreground">40%</p>
-                      </div>
-                      <Progress value={40} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <p className="text-sm font-medium">Data Collection</p>
-                        <p className="text-sm text-muted-foreground">90%</p>
-                      </div>
-                      <Progress value={90} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <p className="text-sm font-medium">Literature Review</p>
-                        <p className="text-sm text-muted-foreground">60%</p>
-                      </div>
-                      <Progress value={60} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="papers" className="animate-fade-in">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Published Papers</CardTitle>
+                  <CardTitle>My Published Projects</CardTitle>
+                  <CardDescription>Manage your published projects and their status</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/20 p-3 rounded-full">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Quantum Computing Applications in Genomics</p>
-                          <p className="text-sm text-muted-foreground">Published in Nature Biotechnology</p>
-                          <div className="flex items-center mt-2">
-                            <Clock className="h-3 w-3 text-muted-foreground mr-1" /> 
-                            <span className="text-xs text-muted-foreground">May 15, 2023</span>
-                            <span className="mx-2 text-muted-foreground">•</span>
-                            <Star className="h-3 w-3 text-amber-500 mr-1" />
-                            <span className="text-xs text-muted-foreground">12 Citations</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">View</Button>
+                  {mockProjects.length > 0 ? (
+                    mockProjects.map((project) => (
+                      <ProjectItem
+                        key={project.id}
+                        {...project}
+                        onEdit={handleProjectEdit}
+                        onDelete={handleProjectDelete}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground">No projects published yet</p>
                     </div>
-                    
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/20 p-3 rounded-full">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Decentralized Clinical Trials: A Blockchain Approach</p>
-                          <p className="text-sm text-muted-foreground">Published in Journal of Medical Internet Research</p>
-                          <div className="flex items-center mt-2">
-                            <Clock className="h-3 w-3 text-muted-foreground mr-1" /> 
-                            <span className="text-xs text-muted-foreground">March 3, 2023</span>
-                            <span className="mx-2 text-muted-foreground">•</span>
-                            <Star className="h-3 w-3 text-amber-500 mr-1" />
-                            <span className="text-xs text-muted-foreground">8 Citations</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">View</Button>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary/20 p-3 rounded-full">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">AI-Assisted Drug Discovery: Current Challenges and Future Prospects</p>
-                          <p className="text-sm text-muted-foreground">Published in Science Advances</p>
-                          <div className="flex items-center mt-2">
-                            <Clock className="h-3 w-3 text-muted-foreground mr-1" /> 
-                            <span className="text-xs text-muted-foreground">November 20, 2022</span>
-                            <span className="mx-2 text-muted-foreground">•</span>
-                            <Star className="h-3 w-3 text-amber-500 mr-1" />
-                            <span className="text-xs text-muted-foreground">15 Citations</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">View</Button>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
             
-            <TabsContent value="collaborations" className="animate-fade-in">
+            <TabsContent value="funding">
               <Card>
                 <CardHeader>
-                  <CardTitle>Active Collaborations</CardTitle>
+                  <CardTitle>Funding Submissions</CardTitle>
+                  <CardDescription>View and manage your funding requests</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-center text-muted-foreground py-8">
-                    Your collaborations will appear here
-                  </p>
+                  {mockFundingSubmissions.length > 0 ? (
+                    mockFundingSubmissions.map((submission) => (
+                      <FundingSubmissionItem
+                        key={submission.id}
+                        {...submission}
+                        onEdit={handleFundingEdit}
+                        onDelete={handleFundingDelete}
+                        onViewDetails={handleFundingViewDetails}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground">No funding submissions yet</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
-            
-            <TabsContent value="datasets" className="animate-fade-in">
+
+            <TabsContent value="transactions">
               <Card>
                 <CardHeader>
-                  <CardTitle>Your Datasets</CardTitle>
+                  <CardTitle>Transaction History</CardTitle>
+                  <CardDescription>View your governance activities and contributions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-center text-muted-foreground py-8">
-                    Your contributed datasets will appear here
-                  </p>
+                  {mockTransactions.length > 0 ? (
+                    mockTransactions.map((transaction) => (
+                      <TransactionHistoryItem
+                        key={transaction.id}
+                        {...transaction}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground">No transaction history yet</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
-            
-            <TabsContent value="proposals" className="animate-fade-in">
+
+            <TabsContent value="open-data">
               <Card>
                 <CardHeader>
-                  <CardTitle>Funding Proposals</CardTitle>
+                  <CardTitle>Open Data Marketplace</CardTitle>
+                  <CardDescription>Manage your data items in the marketplace</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-center text-muted-foreground py-8">
-                    Your funding proposals will appear here
-                  </p>
+                  {mockOpenDataItems.length > 0 ? (
+                    mockOpenDataItems.map((item) => (
+                      <OpenDataItem
+                        key={item.id}
+                        {...item}
+                        onEdit={handleOpenDataEdit}
+                        onDelete={handleOpenDataDelete}
+                        onViewDetails={handleOpenDataViewDetails}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground">No data items in the marketplace yet</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
