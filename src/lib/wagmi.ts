@@ -4,9 +4,6 @@ import { mainnet, sepolia } from 'wagmi/chains'
 
 // Get environment variables
 const projectId = import.meta.env.VITE_PROJECT_ID
-// if (!projectId) {
-//   throw new Error('VITE_PROJECT_ID is required for WalletConnect. Please add it to your .env file.')
-// }
 
 const rpcUrl = import.meta.env.VITE_EDUCHAIN_RPC_URL || 'https://rpc.open-campus-codex.gelato.digital/'
 const explorerUrl = import.meta.env.VITE_EDUCHAIN_EXPLORER_URL || 'https://opencampus-codex.blockscout.com/'
