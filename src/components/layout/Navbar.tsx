@@ -5,11 +5,13 @@ import { MoonIcon, SunIcon, Menu, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ThemeToggle from '../theme/ThemeToggle';
 import { ConnectWallet } from '@/components/ConnectWallet';
+import { useAccount } from 'wagmi';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toast } = useToast();
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +55,11 @@ const Navbar = () => {
           <Link to="/governance" className="text-sm font-medium text-foreground/80 hover:text-primary transition">
             Governance
           </Link>
+          {isConnected && (
+            <Link to="/dashboard" className="text-sm font-medium text-primary hover:text-primary/80 transition">
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -112,6 +119,15 @@ const Navbar = () => {
             >
               Governance
             </Link>
+            {isConnected && (
+              <Link 
+                to="/dashboard" 
+                className="block py-2 text-primary hover:text-primary/80"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            )}
             <div className="pt-2">
               <ConnectWallet />
             </div>
