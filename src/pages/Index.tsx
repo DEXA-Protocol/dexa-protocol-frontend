@@ -100,21 +100,18 @@ const Index = () => {
             </Card>
 
             {/* AI Tools Feature */}
-            <Card className="card-gradient overflow-hidden border">
+            <Card className="card-gradient overflow-hidden border opacity-75">
               <CardContent className="p-6">
                 <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center mb-4">
                   <Brain className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">AI Powered Tools</h3>
                 <p className="text-muted-foreground mb-4">
-                  Leverage AI to translate, summarize and extract insights from complex research papers.
+                  Coming Soon: Leverage AI to translate, summarize and extract insights from complex research papers.
                 </p>
-                <Link 
-                  to="/ai-tools" 
-                  className="flex items-center text-sm text-primary font-medium"
-                >
-                  Try AI Tools <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
+                <div className="text-sm text-primary font-medium">
+                  Coming Soon
+                </div>
               </CardContent>
             </Card>
 
